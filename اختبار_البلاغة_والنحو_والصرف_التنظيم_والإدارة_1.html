@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار البلاغة والنحو والصرف - مسابقة التنظيم والإدارة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark: #1a3a3a;
+    --dark2: #0f2727;
+    --light: #c9a86a;
+    --light2: #e8d4a8;
+    --primary: #1a3a3a;
+    --accent: #b8935a;
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --danger: #b91c1c;
+    --danger-bg: #fef2f2;
+    --text-main: #1c2b2b;
+    --text-sub: #5f7370;
+    --border-c: #dde5e0;
+    --surface: #ffffff;
+    --bg-page: #f7f5f0;
+  }
+  body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: var(--bg-page);
+    background-image: radial-gradient(circle at 10% 0%, #eef0e8 0%, transparent 40%), radial-gradient(circle at 90% 10%, #f3ead8 0%, transparent 40%);
+    color: var(--text-main);
+    direction: rtl;
+    padding: 20px 12px 90px;
+    min-height: 100vh;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  /* Floating WhatsApp button - everywhere */
+  .float-wa {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 56px; height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 6px 18px -4px rgba(37,211,102,0.6);
+    z-index: 100;
+  }
+  .float-wa:hover { transform: scale(1.06); }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .home-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface);
+    border: 1.5px solid var(--border-c);
+    padding: 9px 16px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--dark);
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+  }
+  .home-btn:hover { border-color: var(--dark); background: #f0efe8; }
+
+  .header {
+    background: linear-gradient(120deg, var(--dark2) 0%, var(--dark) 55%, #2d5555 100%);
+    color: #fff;
+    padding: 32px 24px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px -8px rgba(26,58,58,0.5);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--light);
+  }
+  .header::before { content:''; position:absolute; inset:0; background: radial-gradient(circle at 85% -10%, rgba(201,168,106,0.25), transparent 55%); }
+  .header-icon {
+    width: 56px; height: 56px;
+    background: rgba(201,168,106,0.25);
+    border: 1.5px solid var(--light);
+    border-radius: 14px;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 14px; font-size: 26px; position:relative;
+  }
+  .header h1 { font-size: 23px; font-weight: 800; margin-bottom: 8px; position:relative; }
+  .header p { font-size: 13px; opacity: 0.9; position:relative; line-height: 1.7; }
+  .header .divider { width: 44px; height: 2.5px; background: var(--light); border-radius: 3px; margin: 12px auto; position:relative; }
+
+  /* START / TIMER SELECT SCREEN */
+  .start-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border-c);
+    border-radius: 20px;
+    padding: 30px 26px;
+    box-shadow: 0 6px 24px -8px rgba(26,58,58,0.1);
+    margin-bottom: 20px;
+  }
+  .start-card h2 {
+    font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .start-card .sub { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; }
+  .timer-input-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    background: #f7f5f0; border: 1.5px solid var(--border-c); border-radius: 14px; padding: 16px;
+  }
+  .timer-input-row input[type=range] { flex: 1; accent-color: var(--accent); }
+  .timer-value {
+    background: var(--dark); color: var(--light2);
+    padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 16px;
+    min-width: 90px; text-align: center;
+  }
+  .timer-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .timer-preset {
+    padding: 8px 14px; border-radius: 10px; border: 1.5px solid var(--border-c);
+    background: var(--surface); font-size: 12.5px; font-weight: 700; color: var(--text-sub);
+    cursor: pointer; font-family: inherit;
+  }
+  .timer-preset.active { background: var(--dark); border-color: var(--dark); color: var(--light2); }
+  .start-btn {
+    width: 100%; padding: 17px;
+    background: linear-gradient(120deg, var(--dark2), var(--dark));
+    color: var(--light2);
+    border: 1.5px solid var(--light);
+    border-radius: 14px;
+    font-size: 16.5px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 8px 22px -8px rgba(26,58,58,0.5);
+  }
+  .start-btn:hover { opacity: 0.92; }
+  .cat-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .cat-summary-item {
+    background: #f7f5f0; border: 1px solid var(--border-c); border-radius: 10px;
+    padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: var(--dark);
+    display: flex; justify-content: space-between;
+  }
+  .cat-summary-item span.n { color: var(--accent); font-weight: 800; }
+
+  /* EXAM TIMER BAR */
+  .exam-timer-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--dark); color: #fff; border-radius: 14px; padding: 12px 18px;
+    margin-bottom: 16px; font-weight: 700; font-size: 14px;
+  }
+  .exam-timer-bar .time-left { color: var(--light2); font-size: 16px; font-weight: 800; }
+  .exam-timer-bar .time-left.urgent { color: #ff9b9b; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+
+  .progress-wrap { background: #e2ded0; height: 7px; border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+  .progress-bar { background: linear-gradient(90deg, var(--dark), var(--accent)); height: 100%; width: 0%; border-radius: 6px; transition: width .35s ease; }
+  .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-sub); margin-bottom: 14px; font-weight: 600; }
+  .badge { background: #f0e9d8; color: var(--accent); padding: 5px 14px; border-radius: 20px; font-weight: 700; font-size: 12.5px; }
+
+  .card { background: var(--surface); border: 1.5px solid var(--border-c); border-radius: 18px; padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 4px 16px -6px rgba(26,58,58,0.08); }
+  .question-text { font-size: 18px; font-weight: 700; margin-bottom: 18px; line-height: 1.75; color: var(--text-main); }
+  .options { display: grid; gap: 10px; }
+  .option-btn { display:flex; align-items:center; width:100%; text-align:right; padding: 14px 16px; border: 1.5px solid var(--border-c); border-radius: 12px; background:#fdfcf9; font-size:15.5px; cursor:pointer; transition: all .15s; font-family: inherit; color: var(--text-main); }
+  .option-btn:hover { border-color: var(--dark); background: #f0efe6; }
+  .option-btn.correct-answer { border-color: var(--success) !important; background: var(--success-bg) !important; color:#065f46 !important; }
+  .option-btn.wrong-answer { border-color: var(--danger) !important; background: var(--danger-bg) !important; color:#991b1b !important; }
+  .option-btn:disabled { cursor:default; }
+  .opt-text { flex:1; }
+  .result-icon { font-weight:800; font-size:16px; margin-left:6px; }
+  .opt-letter { color: var(--dark); font-weight:800; margin-left:8px; background: #f0e9d8; width:26px; height:26px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+
+  .instant-feedback { display:none; padding:13px 16px; border-radius:12px; margin-bottom:14px; font-size:14.5px; font-weight:700; border:1.5px solid; }
+  .instant-feedback.correct { background: var(--success-bg); border-color:#a7f3d0; color:#065f46; }
+  .instant-feedback.wrong { background: var(--danger-bg); border-color:#fecaca; color:#991b1b; }
+
+  .explain-btn { width:100%; padding:13px; background: var(--surface); border:1.5px dashed var(--accent); border-radius:12px; cursor:pointer; font-size:14px; font-weight:700; color: var(--accent); margin-bottom:16px; }
+  .explain-btn:hover { background: #f5efdd; }
+  .explanation-box { display:none; padding:18px; border-radius:12px; margin-bottom:18px; font-size:14.5px; line-height:1.8; border:1.5px solid; }
+  .explanation-box.correct { background: var(--success-bg); border-color:#a7f3d0; color:#065f46; }
+  .explanation-box.wrong { background: var(--danger-bg); border-color:#fecaca; color:#991b1b; }
+  .explanation-box .verdict { font-weight:800; margin-bottom:8px; display:block; font-size:14px; }
+
+  .nav-row { display:flex; gap:10px; margin-bottom:18px; }
+  .nav-btn { flex:1; padding:13px; border:1.5px solid var(--border-c); border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; background: var(--surface); color: var(--text-main); }
+  .nav-btn:hover:not(:disabled) { border-color: var(--dark); color: var(--dark); }
+  .nav-btn:disabled { background:#f0efe8; color:#c2c7c2; border-color:#eee; cursor:default; }
+  .submit-btn { width:100%; padding:16px; background: linear-gradient(120deg, var(--dark2), var(--dark)); color: var(--light2); border: 1.5px solid var(--light); border-radius:12px; font-size:16px; font-weight:800; cursor:pointer; margin-bottom:10px; box-shadow: 0 8px 20px -8px rgba(26,58,58,0.5); }
+
+  .result-card { background: var(--surface); border-radius: 20px; padding: 38px 24px 28px; text-align:center; margin-bottom:20px; box-shadow: 0 6px 24px -8px rgba(26,58,58,0.12); border:1.5px solid var(--border-c); }
+  .result-ring { width:130px; height:130px; margin:0 auto 18px; position:relative; }
+  .result-ring svg { position:absolute; inset:0; transform: rotate(-90deg); }
+  .result-ring-value { font-size:26px; font-weight:800; position:relative; display:flex; align-items:center; justify-content:center; height:100%; color: var(--dark); }
+  .result-emoji { font-size:40px; margin-bottom:4px; }
+  .result-score { font-size:17px; color: var(--text-sub); margin:4px 0 2px; font-weight:700; }
+  .result-pct { font-size:22px; margin:4px 0 10px; font-weight:800; color: var(--dark); }
+  .result-msg { font-size:14.5px; color: var(--text-sub); font-weight:600; }
+  .result-time { font-size: 13px; color: var(--accent); font-weight: 700; margin-top: 6px; }
+
+  .cat-breakdown { display: grid; gap: 10px; margin-bottom: 20px; }
+  .cat-row { background: var(--surface); border: 1px solid var(--border-c); border-radius: 12px; padding: 12px 16px; }
+  .cat-row-top { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 8px; }
+  .cat-row-top .cat-score { color: var(--dark); }
+  .cat-bar-wrap { background: #f0efe6; height: 6px; border-radius: 4px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; background: linear-gradient(90deg, var(--dark), var(--accent)); border-radius: 4px; }
+
+  .contact-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:16px; color:#fff; text-decoration:none; border-radius:12px; font-weight:800; font-size:15.5px; margin-bottom:12px; box-shadow:0 6px 16px -6px rgba(0,0,0,0.2); }
+  .wa-btn { background:#25D366; }
+  .camp-btn { background: linear-gradient(120deg, var(--dark2), var(--dark)); border: 1.5px solid var(--light); }
+  .camp-price { display:inline-block; background: rgba(255,255,255,0.2); padding:2px 10px; border-radius:20px; font-size:13px; margin-right:6px; }
+  .retry-btn { width:100%; padding:13px; background: var(--surface); border:1.5px solid var(--border-c); border-radius:12px; cursor:pointer; font-size:14px; font-weight:700; color: var(--dark); margin-bottom: 10px; }
+
+  .toggle-review-btn { width:100%; padding:13px; background: var(--surface); border:1.5px solid var(--border-c); border-radius:12px; cursor:pointer; font-size:14px; font-weight:700; color: var(--dark); margin-bottom:18px; }
+  .review-list { display:none; }
+  .review-item { background: var(--surface); border: 1px solid var(--border-c); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+  .review-item .q-num { font-size: 12.5px; color: var(--text-sub); margin-bottom: 6px; font-weight: 700; }
+  .review-item .q-text { font-size: 15px; margin-bottom: 10px; font-weight: 700; color: var(--text-main); }
+  .review-item .ans-line { font-size: 13.5px; margin-bottom: 4px; font-weight: 600; }
+  .review-item .ans-line.correct { color: #059669; }
+  .review-item .ans-line.wrong { color: #b91c1c; }
+  .review-item .explain-line { font-size: 13px; color: var(--text-sub); margin-top: 8px; line-height: 1.7; border-top: 1px dashed var(--border-c); padding-top: 10px; }
+
+  .footer { text-align:center; margin-top:32px; font-size:12px; color:#8a9490; border-top:1px solid var(--border-c); padding-top:18px; font-weight:600; line-height:1.9; }
+
+  .timeup-banner { display:none; background: var(--danger-bg); border: 1.5px solid #fecaca; color:#991b1b; padding: 14px 18px; border-radius: 12px; font-weight: 800; text-align:center; margin-bottom: 16px; }
+
+  /* Password Gate */
+  .lock-wrap {
+    max-width: 420px;
+    margin: 60px auto;
+    background: var(--surface);
+    border: 1.5px solid var(--border-c);
+    border-radius: 20px;
+    padding: 34px 26px;
+    text-align: center;
+    box-shadow: 0 10px 30px -10px rgba(26,58,58,0.25);
+  }
+  .lock-icon {
+    width: 64px; height: 64px;
+    background: rgba(201,168,106,0.2);
+    border: 1.5px solid var(--light);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 30px;
+  }
+  .lock-wrap h2 { color: var(--dark); margin-bottom: 8px; font-size: 20px; }
+  .lock-wrap p { color: var(--text-sub); font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+  .lock-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border-c);
+    border-radius: 12px;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 4px;
+    font-family: inherit;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .lock-input:focus { border-color: var(--accent); }
+  .lock-btn {
+    width: 100%;
+    background: linear-gradient(120deg, var(--dark2), var(--dark));
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+  .lock-btn:hover { opacity: 0.92; }
+  .lock-error {
+    display: none;
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1.5px solid #fecaca;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .lock-wa {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    padding: 13px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 14.5px;
+  }
+  .lock-wa:hover { opacity: 0.92; }
+</style>
+</head>
+<body>
+
+<a href="https://wa.me/201505191893" target="_blank" class="float-wa" title="تواصل عبر واتساب">📱</a>
+
+<!-- PASSWORD GATE -->
+<div class="container" id="lockView">
+  <div class="lock-wrap">
+    <div class="lock-icon">🔒</div>
+    <h2>الاختبار محمي بكلمة سر</h2>
+    <p>للحصول على كلمة السر يرجى الاشتراك في المعسكر والتواصل معنا عبر واتساب</p>
+    <input type="text" id="lockPasswordInput" class="lock-input" placeholder="ادخل كلمة السر" inputmode="numeric" onkeydown="if(event.key==='Enter') checkLockPassword()">
+    <div class="lock-error" id="lockError">كلمة السر غير صحيحة، حاول مرة أخرى</div>
+    <button class="lock-btn" onclick="checkLockPassword()">✅ دخول الاختبار</button>
+    <a href="https://wa.me/201505191893?text=أرغب%20في%20الاشتراك%20في%20المعسكر%20للحصول%20على%20كلمة%20السر" target="_blank" class="lock-wa">📱 تواصل عبر واتساب للاشتراك في المعسكر</a>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+
+  <div class="top-bar">
+    <button class="home-btn" onclick="goHome()">🏠 الرئيسية</button>
+    <a href="https://wa.me/201505191893" target="_blank" class="home-btn" style="color:#25D366;border-color:#bff0d3;">📱 واتساب</a>
+  </div>
+
+  <div class="header">
+    <div class="header-icon">📝</div>
+    <h1>اختبار البلاغة والنحو والصرف</h1>
+    <div class="divider"></div>
+    <p>محاكي شامل للبلاغة والنحو والصرف والعروض - محور التنظيم والإدارة</p>
+    <p>مقدم من صفحة ببساطة - إعداد مستر محمد سيد ومس نورهان إبراهيم</p>
+  </div>
+
+  <!-- START / TIMER SELECTION SCREEN -->
+  <div id="startView">
+    <div class="start-card">
+      <h2>⏱ حدد وقت الاختبار</h2>
+      <div class="sub">اختر المدة الزمنية المناسبة لإنهاء الاختبار (من دقيقة واحدة إلى 60 دقيقة)</div>
+
+      <div class="timer-input-row">
+        <input type="range" id="timeSlider" min="1" max="60" value="30" oninput="updateTimeDisplay()">
+        <div class="timer-value" id="timeDisplay">30 دقيقة</div>
+      </div>
+
+      <div class="timer-presets">
+        <button class="timer-preset" onclick="setPreset(5)">5 د</button>
+        <button class="timer-preset" onclick="setPreset(15)">15 د</button>
+        <button class="timer-preset active" onclick="setPreset(30)">30 د</button>
+        <button class="timer-preset" onclick="setPreset(45)">45 د</button>
+        <button class="timer-preset" onclick="setPreset(60)">60 د</button>
+      </div>
+
+      <div class="cat-summary" id="catSummary"></div>
+
+      <button class="start-btn" onclick="startExam()">🚀 ابدأ الاختبار الآن</button>
+    </div>
+  </div>
+
+  <!-- EXAM VIEW -->
+  <div id="examView" style="display:none;">
+    <div class="exam-timer-bar">
+      <span>⏱ الوقت المتبقي</span>
+      <span class="time-left" id="timeLeftDisplay">30:00</span>
+    </div>
+    <div class="timeup-banner" id="timeupBanner">⏰ انتهى الوقت المحدد! تم تصحيح إجاباتك حتى الآن تلقائياً.</div>
+
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="meta-row">
+      <span id="qCounter"></span>
+      <span class="badge" id="qCategory"></span>
+    </div>
+
+    <div class="card">
+      <div class="question-text" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+    </div>
+
+    <div class="instant-feedback" id="instantFeedback"></div>
+
+    <button class="explain-btn" id="explainBtn" style="display:none;" onclick="toggleExplanation()">💡 عرض شرح الإجابة</button>
+    <div class="explanation-box" id="explanationBox"></div>
+
+    <div class="nav-row">
+      <button class="nav-btn" id="prevBtn" onclick="prevQuestion()">← السابق</button>
+      <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">التالي →</button>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" style="display:none;" onclick="submitExam()">📊 تصحيح الاختبار</button>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="resultView" style="display:none;">
+    <div class="result-card">
+      <div class="result-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="56" fill="none" stroke="#f0efe6" stroke-width="12"/>
+          <circle id="ringFill" cx="65" cy="65" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352"/>
+          <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a3a3a"/><stop offset="100%" stop-color="#b8935a"/></linearGradient></defs>
+        </svg>
+        <div class="result-ring-value" id="resultRingValue">0%</div>
+      </div>
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-score" id="resultScore"></div>
+      <div class="result-pct" id="resultPct"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-time" id="resultTime"></div>
+    </div>
+
+    <div class="cat-breakdown" id="catBreakdown"></div>
+
+    <button class="toggle-review-btn" onclick="toggleReview()">📋 عرض مراجعة الإجابات</button>
+    <div class="review-list" id="reviewList"></div>
+
+    <a href="https://wa.me/201505191893" target="_blank" class="contact-btn wa-btn">📱 تواصل عبر واتساب - 01505191893</a>
+    <a href="https://wa.me/201505191893?text=أرغب%20في%20الاشتراك%20في%20المعسكر" target="_blank" class="contact-btn camp-btn">🎯 اشترك في المعسكر</a>
+
+    <button class="retry-btn" onclick="goHome()">🏠 العودة للرئيسية وإعادة المحاولة</button>
+  </div>
+
+  <div class="footer">
+    <p>مقدم من صفحة ببساطة</p>
+    <p>إعداد: مستر محمد سيد ومس نورهان إبراهيم</p>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+{ category: "المجاز العقلي وعلاقاته", text: "ما تعريف المجاز العقلي؟", options: ["إسناد الفعل أو ما في معناه إلى غير ما هو له فعلاً، مع وجود علاقة وقرينة مانعة","استعمال اللفظ في معناه الحقيقي فقط","تشبيه شيء بشيء آخر لعلاقة المشابهة","حذف كلمة من الجملة مع بقاء المعنى"], correct: 0, explanation: "المجاز العقلي: إسناد الفعل أو ما في معناه إلى شيء ملابس له غير صاحبه الحقيقي (كإسناده إلى الزمان أو المكان أو السبب)، وذلك لعلاقة معينة مع وجود قرينة تمنع إرادة الإسناد الحقيقي." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير (عيشة راضية) أُسند الفعل إلى غير فاعله الحقيقي، فما نوع العلاقة؟", options: ["الفاعلية","المفعولية","الزمانية","السببية"], correct: 1, explanation: "(راضية) في الأصل بمعنى (مرضيّة)، أي مفعول به في المعنى، فالعلاقة هنا مفعولية." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير (ماء دافق) ما نوع العلاقة في المجاز العقلي؟", options: ["الفاعلية","المفعولية","المكانية","الغائية"], correct: 0, explanation: "(دافق) بمعنى (مندفق)، أي أن الماء هو الذي يقوم بالدَّفق فعلياً، فالعلاقة هنا فاعلية." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير مثل (يوم مشرق) أو (ليل ممطر)، ما نوع علاقة المجاز العقلي؟", options: ["الزمانية","المكانية","السببية","المصدرية"], correct: 0, explanation: "نُسب الإشراق أو المطر إلى الزمان (اليوم أو الليل) وهو ظرف وقع فيه الفعل لا فاعله الحقيقي، فالعلاقة زمانية." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير مثل (طريق سائر أهله) أو (نهر جارٍ)، ما نوع علاقة المجاز العقلي؟", options: ["المكانية","الزمانية","الفاعلية","الغائية"], correct: 0, explanation: "نُسب السير أو الجريان إلى المكان (الطريق أو النهر) الذي وقع فيه الفعل حقيقة لا إلى فاعله، فالعلاقة مكانية." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير (بنى الأميرُ المدينةَ)، مع العلم أن الأمير لم يباشر البناء بنفسه، ما نوع علاقة المجاز العقلي؟", options: ["السببية","المكانية","الزمانية","المصدرية"], correct: 0, explanation: "نُسب الفعل إلى الأمير؛ لأنه كان السبب في البناء (بأمره)، لا لأنه باشره بنفسه، فالعلاقة سببية." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير مثل (يوم يقوم الحساب)، حيث الأصل أن الناس يقومون لأجل الحساب لا الحساب نفسه، ما نوع هذه العلاقة؟", options: ["الغائية (السبب الغائي)","الفاعلية","المكانية","المصدرية"], correct: 0, explanation: "نُسب القيام إلى الحساب مع أن الحساب هو الغاية التي من أجلها يقوم الناس، فهذا يُسمى بالعلاقة الغائية (السبب الغائي)." },
+{ category: "المجاز العقلي وعلاقاته", text: "في تعبير مثل (جَدَّ جَدُّهم)، ما نوع علاقة المجاز العقلي؟", options: ["المصدرية","الفاعلية","الزمانية","المكانية"], correct: 0, explanation: "نُسب الفعل إلى المصدر (الجَدّ)، وهذا يُعرف بالعلاقة المصدرية." },
+{ category: "المجاز العقلي وعلاقاته", text: "علاقة المشابهة (التشبيه بين المعنيين) تكون أساس أي نوع من المجاز؟", options: ["الاستعارة","المجاز المرسل","المجاز العقلي","الكناية"], correct: 0, explanation: "الاستعارة تقوم على علاقة المشابهة بين المعنى الحقيقي والمعنى المجازي، بخلاف المجاز المرسل الذي تكون علاقته غير المشابهة (كالسببية والمسببية والجزئية والكلية وغيرها)." },
+{ category: "الاستعارة", text: "الاستعارة التي حُذف فيها المشبه به وأُبقي شيء من لوازمه تُسمى:", options: ["استعارة تصريحية","استعارة مكنية","استعارة تمثيلية","مجاز مرسل"], correct: 1, explanation: "الاستعارة المكنية (وتُسمى أيضاً التخييلية): يُحذف فيها المشبه به، ويُرمز إليه بذكر شيء من لوازمه." },
+{ category: "الاستعارة", text: "في تعبير (واخفض لهما جناح الذل من الرحمة)، شُبِّه المتذلل لوالديه بطائر يخفض جناحيه، فما نوع الاستعارة؟", options: ["استعارة تصريحية","استعارة مكنية","استعارة تمثيلية","مجاز مرسل"], correct: 1, explanation: "حُذف المشبه به (الطائر) وأُبقي شيء من لوازمه (الجناح)، فهذه استعارة مكنية." },
+{ category: "الاستعارة", text: "في تعبير (وإذا المنيّة أنشبت أظفارها)، ما نوع الاستعارة؟", options: ["استعارة تصريحية","استعارة مكنية","استعارة تمثيلية","مجاز مرسل"], correct: 1, explanation: "شُبّهت المنية بسبُع له أظفار، وحُذف المشبه به (السبُع) وأُبقي شيء من لوازمه (الأظفار)، فهي استعارة مكنية." },
+{ category: "الاستعارة", text: "ما تعريف الاستعارة التمثيلية؟", options: ["لفظ مفرد استُعمل في غير معناه الأصلي لعلاقة المشابهة","لفظ مركب استُعمل في غير موضعه الأصلي لعلاقة المشابهة بين المعنى الحقيقي والمجازي مع وجود قرينة مانعة","حذف المشبه به مع الإبقاء على لوازمه","تشبيه صريح يُذكر فيه المشبه والمشبه به معاً"], correct: 1, explanation: "الاستعارة التمثيلية: لفظ مركب (تعبير أو مثل) يُستعمل في غير موضعه الأصلي لعلاقة المشابهة، مع وجود قرينة تمنع إرادة المعنى الحقيقي، وأصلها تشبيه تمثيلي حُذف منه المشبه." },
+{ category: "الاستعارة", text: "تعبير (ولا تجعل يدك مغلولة إلى عنقك) مثال على:", options: ["استعارة تصريحية","استعارة مكنية","استعارة تمثيلية","كناية عن صفة"], correct: 2, explanation: "هذا التعبير مَثَل مركب يُستعمل للدلالة على البخل الشديد، وهو من أمثلة الاستعارة التمثيلية." },
+{ category: "الاستعارة", text: "الاستعارة التي يُصرَّح فيها بلفظ المشبه به (لا المشبه) تُسمى:", options: ["استعارة تصريحية","استعارة مكنية","استعارة تمثيلية","كناية"], correct: 0, explanation: "الاستعارة التصريحية: يُصرَّح فيها بلفظ المشبه به، ويُحذف المشبه، بخلاف المكنية التي يُصرَّح فيها بالمشبه ويُحذف المشبه به." },
+{ category: "الاستعارة", text: "علاقة الاستعارة تقوم دائماً على:", options: ["المشابهة بين طرفين","السببية بين طرفين","المجاورة بين طرفين","الحلول بين طرفين"], correct: 0, explanation: "الاستعارة نوع من المجاز اللغوي الذي علاقته المشابهة بين المعنى الحقيقي والمعنى المستعار له." },
+{ category: "الكناية والمجاز المرسل", text: "ما الفرق بين قرينة المجاز وقرينة الكناية؟", options: ["لا فرق بينهما","قرينة المجاز تمنع إرادة المعنى الحقيقي، أما قرينة الكناية فلا تمنع إرادته","الكناية ليس لها قرينة أصلاً","المجاز لا يحتاج قرينة"], correct: 1, explanation: "في المجاز، تمنع القرينة من إرادة المعنى الحقيقي وتُحتّم المعنى المجازي. أما في الكناية، فلا تمنع القرينة من إرادة المعنى الحقيقي، بل يبقى الانتقال إلى المعنى الكنائي جائزاً مع بقاء احتمال المعنى الحقيقي." },
+{ category: "الكناية والمجاز المرسل", text: "بيت يصف كرم امرأة بأنها آثرت ضيفها المستعير على نفسها رغم قلة الطعام، هو مثال على:", options: ["كناية عن صفة (الكرم)","كناية عن موصوف","كناية عن نسبة","مجاز مرسل"], correct: 0, explanation: "وصف فعل يدل على الكرم دون التصريح بلفظ (كريمة) يُعد كناية عن صفة الكرم." },
+{ category: "الكناية والمجاز المرسل", text: "تعبير مثل (لا يُنزَل المجدُ إلا في منازلنا) هو مثال على:", options: ["كناية عن صفة","كناية عن موصوف","كناية عن نسبة","استعارة تصريحية"], correct: 2, explanation: "هذا كناية عن نسبة؛ لأن المتكلم لا يصف شخصاً أو صفة مباشرة، بل ينسب المجد والشرف إلى بيته أو قومه بطريق غير مباشر." },
+{ category: "الكناية والمجاز المرسل", text: "تشبيه (الذين حُمّلوا التوراة ثم لم يحملوها) بـ(الحمار يحمل أسفاراً) هو تشبيه:", options: ["تشبيه مفرد","تشبيه تمثيلي","تشبيه بليغ فقط","استعارة مكنية"], correct: 1, explanation: "هذا تشبيه تمثيلي؛ لأن وجه الشبه فيه منتزع من صورة متعددة (حمل الأسفار دون فهم لمضمونها)، لا من صفة مفردة واحدة." },
+{ category: "الكناية والمجاز المرسل", text: "المجاز الذي تكون علاقته غير المشابهة (كالسببية أو المسببية أو الجزئية) يُسمى:", options: ["استعارة","مجازاً مرسلاً","كناية","تشبيهاً بليغاً"], correct: 1, explanation: "المجاز المرسل: مجاز علاقته بين المعنى الحقيقي والمجازي علاقة غير المشابهة، كالسببية والمسببية والجزئية والكلية والمحلية وغيرها." },
+{ category: "التورية", text: "ما تعريف التورية؟", options: ["لفظ له معنيان: قريب ظاهر غير مراد، وبعيد خفي هو المراد","تشبيه شيء بشيء آخر","حذف المشبه به من الاستعارة","تكرار لفظ لغرض التوكيد"], correct: 0, explanation: "التورية: أن يُطلق المتكلم لفظاً له معنيان، أحدهما قريب ظاهر غير مراد يتبادر للذهن أولاً، والآخر بعيد خفي هو المراد الحقيقي." },
+{ category: "التورية", text: "ما هما ركنا التورية؟", options: ["المشبه والمشبه به","المورَّى به (المعنى القريب) والمورَّى عنه (المعنى البعيد)","المسند والمسند إليه","الحقيقة والمجاز"], correct: 1, explanation: "أركان التورية: المورَّى به، وهو المعنى القريب الظاهر، والمورَّى عنه، وهو المعنى البعيد الخفي المراد." },
+{ category: "التورية", text: "التورية التي لم يُذكر فيها ما يلائم أياً من المعنيين القريب أو البعيد تُسمى:", options: ["التورية المرشحة","التورية المجردة","التورية المبيَّنة","التورية المهيَّأة"], correct: 1, explanation: "التورية المجردة: هي التي لا يُذكر فيها ما يلائم أحد المعنيين، أو يُذكر ما يلائم المعنيين معاً دون ترجيح أحدهما." },
+{ category: "التورية", text: "التورية التي يُذكر فيها ما يلائم المعنى القريب فقط تُسمى:", options: ["التورية المرشحة","التورية المبيَّنة","التورية المهيَّأة","التورية المجردة"], correct: 0, explanation: "التورية المرشحة: هي التي يُذكر فيها ما يلائم المعنى القريب (المورَّى به)." },
+{ category: "التورية", text: "التورية التي يُذكر فيها ما يلائم المعنى البعيد فقط تُسمى:", options: ["التورية المرشحة","التورية المبيَّنة","التورية المهيَّأة","التورية المجردة"], correct: 1, explanation: "التورية المبيَّنة: هي التي يُذكر فيها ما يلائم المعنى البعيد (المورَّى عنه)." },
+{ category: "التورية", text: "التورية التي تحتاج إلى لفظين معاً حتى تتحقق (لا يكفي فيها لفظ واحد) تُسمى:", options: ["التورية المجردة","التورية المرشحة","التورية المهيَّأة","التورية المبيَّنة"], correct: 2, explanation: "التورية المهيَّأة: هي التي تحتاج إلى ذكر لفظين متلائمين معاً لتحقيق المعنيين، بحيث لولا اللفظان معاً لما تحققت التورية." },
+{ category: "المحسنات البديعية", text: "تعبير مثل (نسوا الله فنسيهم) الذي استُخدمت فيه كلمة بمعنى قريب من كلمة أخرى تحرزاً عن الاختلاف اللفظي، يُسمى:", options: ["الطباق","الجناس","المشاكلة","المقابلة"], correct: 2, explanation: "المشاكلة: أن يُذكر الشيء بلفظ غيره لوقوعه في صحبته، تحرزاً عن مخالفة الأسلوب اللفظي، كما في (نسوا الله فنسيهم) حيث استُعير لفظ (نسيان) في السياق الثاني وإن كان المعنى المراد فيه (الترك أو الإهمال العقابي) لا النسيان الحقيقي." },
+{ category: "المحسنات البديعية", text: "تعبير (قطفت هند الوردة) بتكرار الفعل نفسه بدل استخدام ضمير هو مثال على:", options: ["الجناس","المشاكلة","الطباق","المقابلة"], correct: 1, explanation: "هذا مثال على المشاكلة؛ لتكرار نفس اللفظ (قطفت) مسايرة للسياق اللفظي بدلاً من استخدام ضمير." },
+{ category: "المحسنات البديعية", text: "الجمع بين لفظين متفقين في النطق والكتابة تماماً لكن مختلفين في المعنى يُسمى:", options: ["جناساً تاماً","جناساً ناقصاً","جناساً محرَّفاً","طباقاً"], correct: 0, explanation: "الجناس التام: هو اتفاق اللفظين تماماً في نوع الحروف وعددها وترتيبها وهيئتها (الحركات والسكنات)، مع اختلاف المعنى." },
+{ category: "المحسنات البديعية", text: "الجمع بين لفظين مختلفين في ضبط بعض الحروف (كالحركات) مع اتفاقهما في نوع الحروف وترتيبها يُسمى:", options: ["جناساً تاماً","جناساً محرَّفاً","طباقاً","مقابلة"], correct: 1, explanation: "الجناس المحرَّف (أو الناقص): هو اختلاف اللفظين في هيئة الحروف (الحركات) مع اتفاقهما في نوع الحروف وترتيبها، كما في كلمتي (مطايا) و(مذهب) و(مذهب) من حيث اختلاف نوع بعض الحروف." },
+{ category: "المحسنات البديعية", text: "الجمع بين معنيين متضادين في الكلام دون زيادة عليهما يُسمى:", options: ["الطباق","المقابلة","المشاكلة","التورية"], correct: 0, explanation: "الطباق: الجمع بين لفظين متضادين في المعنى في الكلام نفسه." },
+{ category: "المحسنات البديعية", text: "الجمع بين معنيين متوافقين أو أكثر، ثم الإتيان بما يقابلهما على الترتيب، يُسمى:", options: ["الطباق","المقابلة","الجناس","التورية"], correct: 1, explanation: "المقابلة: أن يُؤتى بمعنيين متوافقين أو أكثر، ثم يُؤتى بما يقابل ذلك على الترتيب، وهي أوسع من الطباق الذي يقتصر على ضدين فقط." },
+{ category: "المحسنات البديعية", text: "تعبير (أشداء على الكفار رحماء بينهم) فيه طباق يُوصف بأنه:", options: ["طباق إيجاب صريح","طباق خفي (لأن الرحمة ليست الضد الحرفي للشدة، بل نتيجة عن اللين المقابل لها)","لا يوجد طباق في هذا التعبير","جناس تام"], correct: 1, explanation: "يُسمى هذا النوع طباقاً خفياً؛ لأن التضاد بين (أشداء) و(رحماء) ليس تضاداً مباشراً حرفياً، بل ضمنياً عبر تضاد الشدة مع اللين الذي تنتج عنه الرحمة." },
+{ category: "المحسنات البديعية", text: "تواطؤ أواخر الفقرات النثرية على حرف واحد يُسمى:", options: ["السجع","الجناس","الطباق","المقابلة"], correct: 0, explanation: "السجع: توافق أواخر فقرات الكلام المنثور على حرف واحد، وهو من محسنات النثر اللفظية." },
+{ category: "المحسنات البديعية", text: "تواطؤ أواخر الآيات القرآنية على حرف واحد يُسمى في اصطلاح البلاغيين:", options: ["السجع","الفاصلة القرآنية","الجناس","الطباق"], correct: 1, explanation: "يُسمى هذا في القرآن الكريم بـ(الفاصلة القرآنية)، تمييزاً له عن مصطلح (السجع) الذي يُستخدم عادة للنثر البشري، رغم اتفاقهما من حيث الشكل الصوتي." },
+{ category: "المحسنات البديعية", text: "ما فائدة الفاصلة القرآنية بلاغياً؟", options: ["الزخرفة اللفظية فقط دون معنى","التفسير والتوضيح، والإفصاح عن معانٍ زائدة يفتقر السياق إليها","إطالة الآيات فقط","لا فائدة بلاغية لها"], correct: 1, explanation: "الفاصلة القرآنية لها فائدة بلاغية عميقة تتجاوز الجرس الصوتي، إذ تفصح عن معانٍ إضافية مرادة يحتاجها السياق، ولها أثر في تفسير القرآن وإعرابه." },
+{ category: "أساليب القصر", text: "كم عدد أحوال القصر باعتبار المخاطَب؟", options: ["حالتان فقط","ثلاث حالات: إفراد، وقلب (عكس)، وتعيين","أربع حالات","لا يوجد تصنيف محدد"], correct: 1, explanation: "أحوال القصر باعتبار حال المخاطَب ثلاثة: قصر الإفراد، وقصر القلب (العكس)، وقصر التعيين." },
+{ category: "أساليب القصر", text: "في عبارة (لا إله إلا الله)، ما نوع القصر باعتبار الطرفين؟", options: ["قصر موصوف على صفة","قصر صفة على موصوف","قصر حقيقي (إفراد)","لا يوجد قصر"], correct: 2, explanation: "هذا قصر حقيقي (قصر إفراد)؛ لأن الألوهية الحقة مقصورة على الله وحده دون سواه بشكل مطلق وواقعي." },
+{ category: "أساليب القصر", text: "في عبارة (وما محمدٌ إلا رسولٌ)، ما نوع القصر؟", options: ["قصر صفة على موصوف","قصر موصوف على صفة","قصر حقيقي مطلق","لا يوجد قصر"], correct: 1, explanation: "هذا قصر موصوف (محمد) على صفة (الرسالة)؛ أي إن صفاته مقصورة على كونه رسولاً، تصحيحاً لاعتقاد من ظنّ فيه ما لا يليق كالألوهية." },
+{ category: "أساليب القصر", text: "في عبارة (لا حَولَ ولا قوةَ إلا بالله)، ما نوع القصر؟", options: ["قصر صفة على موصوف","قصر موصوف على صفة","لا يوجد قصر","قصر إضافي فقط"], correct: 0, explanation: "هذا قصر صفة (الحول والقوة) على موصوف (الله تعالى)؛ أي أن الحول والقوة لا يكونان إلا بالله سبحانه." },
+{ category: "أساليب القصر", text: "أداة القصر (إنما) في مثل (إنما أنت منذر) تفيد:", options: ["قصر موصوف (المخاطَب) على صفة (الإنذار)، أي أن مهمته مقصورة على الإنذار دون التصرف في الهداية","النفي المطلق دون قصر","التوكيد اللفظي بالتكرار","الاستفهام الإنكاري"], correct: 0, explanation: "(إنما) هنا تفيد قصر الموصوف (المخاطَب، وهو النبي صلى الله عليه وسلم) على صفة الإنذار؛ أي أن دوره مقصور على التبليغ والإنذار، وليس له من أمر الهداية شيء." },
+{ category: "الإنشاء والأغراض البلاغية", text: "الاستفهام في (سواءٌ عليهم أأنذرتَهم أم لم تُنذرهم) خرج عن معناه الحقيقي إلى:", options: ["التسوية","الإنكار","التعجب","الأمر"], correct: 0, explanation: "خرج الاستفهام هنا إلى معنى (التسوية)؛ أي أن الإنذار وعدمه سواء بالنسبة لمن طُبع على قلوبهم." },
+{ category: "الإنشاء والأغراض البلاغية", text: "الاستفهام في (هل جزاء الإحسان إلا الإحسان) خرج إلى معنى:", options: ["النفي","التسوية","التعجب","التمني"], correct: 0, explanation: "خرج الاستفهام هنا إلى معنى النفي؛ أي (ما جزاء الإحسان إلا الإحسان)، وهذا أسلوب شائع في القرآن الكريم." },
+{ category: "الإنشاء والأغراض البلاغية", text: "الاستفهام في (وما تلك بيمينك يا موسى) خرج إلى غرض:", options: ["الاستئناس وتشويق المخاطَب للحوار","التوبيخ","التعجيز","التمني"], correct: 0, explanation: "خرج الاستفهام هنا إلى غرض الاستئناس؛ إذ سأل الله تعالى موسى عليه السلام عن العصا مع علمه بها، تلطفاً واستئناساً به قبل إظهار المعجزة." },
+{ category: "الإنشاء والأغراض البلاغية", text: "الأمر في قوله تعالى (اذهب إلى فرعون إنه طغى) يتضمن جملة تعليلية للأمر تُعد من أساليب:", options: ["الإيجاز بالحذف","الإطناب بالتعليل (ذكر السبب زيادة على أصل المعنى)","المساواة","التقديم والتأخير فقط"], correct: 1, explanation: "جملة (إنه طغى) تعليل زائد على أصل الأمر، وذِكر هذا التعليل الإضافي يُعد من صور الإطناب (زيادة اللفظ لفائدة، هنا توضيح سبب الإرسال)." },
+{ category: "الإنشاء والأغراض البلاغية", text: "أمر الشاعر في (فأتِ بمثلهم) لمن يستحيل عليه الإتيان بمثلهم، غرضه البلاغي:", options: ["الالتماس","التعجيز","الدعاء","التمني"], correct: 1, explanation: "الأمر هنا خرج عن معناه الحقيقي إلى (التعجيز)؛ لأن المخاطَب عاجز أصلاً عن الإتيان بمثل ما طُلب منه." },
+{ category: "الإنشاء والأغراض البلاغية", text: "أسلوب المتكلم إذا خاطب مساوياً له في المنزلة بصيغة الأمر، فإن الأمر يخرج إلى معنى:", options: ["الإلزام والوجوب","الالتماس (الطلب برفق دون علو)","التهديد","التعجيز"], correct: 1, explanation: "إذا صدر الأمر من نِدٍّ إلى نِدّ مساوٍ له في المنزلة، خرج عن معنى الإلزام إلى معنى الالتماس، وهو طلب الشيء برفق ولين." },
+{ category: "الإنشاء والأغراض البلاغية", text: "أسلوب بلاغي يقوم فيه المتكلم بالانتقال من صيغة الغيبة إلى صيغة الخطاب المباشر (أو العكس) داخل الكلام نفسه يُسمى:", options: ["الالتفات","المساواة","الإطناب","الإيجاز"], correct: 0, explanation: "الالتفات: الانتقال بالكلام من أسلوب إلى آخر (كالانتقال من الغيبة إلى الخطاب، أو من الخطاب إلى التكلم، وهكذا) لغرض بلاغي كالتنبيه أو التشويق." },
+{ category: "الإنشاء والأغراض البلاغية", text: "التعبير عن المسند إليه بالاسم الموصول بدلاً من ذكره صراحة، بقصد تنبيه المخاطَب إلى خطئه دون تصريح مباشر، من أغراض:", options: ["استخدام الاسم الموصول للتنبيه على الخطأ","الإطناب بلا فائدة","الحذف للإيجاز","لا يوجد لهذا غرض بلاغي"], correct: 0, explanation: "من أغراض استخدام الاسم الموصول (كـ الذين) بدل الاسم الصريح: التنبيه على خطأ المخاطَب دون تصريح مباشر بذلك، كما في مخاطبة من يزعم شيئاً غير صحيح." },
+{ category: "الإنشاء والأغراض البلاغية", text: "الاستفهام في (كيف تكفرون بالله وكنتم أمواتاً فأحياكم) يجمع بين عدة أغراض بلاغية، وهي:", options: ["التعجب والإنكار والتوبيخ معاً","التمني فقط","النفي المحض","الأمر والنهي"], correct: 0, explanation: "يجمع هذا الاستفهام بين أكثر من غرض بلاغي في آن واحد: التعجب من حالهم، والإنكار عليهم، والتوبيخ لهم على كفرهم رغم وضوح الأدلة." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "ما تعريف (حسن التعليل) كمحسّن بديعي؟", options: ["أن يدّعي الأديب لوصف حقيقي علة غير الحقيقية، لكنها لطيفة تناسب الموقف","أن يذكر السبب الحقيقي للحدث فقط","أن يحذف السبب تماماً","أن يستخدم لفظاً غامضاً"], correct: 0, explanation: "حسن التعليل: أن يدّعي الأديب لوصف موجود بالفعل علةً غير حقيقية، لكنها لطيفة أو طريفة تناسب المقام، مع تجاهل السبب الحقيقي." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "تكرار عبارة أو جملة بنفس اللفظ لغرض تثبيت المعنى في ذهن السامع يُسمى:", options: ["التكرار (وهو من وسائل التوكيد)","الطباق","المقابلة","التورية"], correct: 0, explanation: "التكرار وسيلة من وسائل التوكيد اللفظي، تُستخدم لترسيخ المعنى في ذهن السامع، كما في تكرار (فإن مع العسر يسراً)." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "المبالغة التي يكون فيها المعنى المُدَّعى ممكناً عقلاً وعادة تُسمى:", options: ["التبليغ","الإغراق","الغلو","التشبيه"], correct: 0, explanation: "التبليغ: أن يكون المعنى المبالغ فيه ممكن الوقوع عقلاً وعادة معاً." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "المبالغة التي يكون فيها المعنى المُدَّعى ممكناً عقلاً فقط دون العادة تُسمى:", options: ["التبليغ","الإغراق","الغلو","التوكيد"], correct: 1, explanation: "الإغراق: أن يكون المعنى المبالغ فيه ممكناً من حيث العقل، لكنه غير معهود أو غير ممكن عادة." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "المبالغة التي يكون فيها المعنى المُدَّعى مستحيلاً عقلاً وعادة معاً تُسمى:", options: ["التبليغ","الإغراق","الغلو","المساواة"], correct: 2, explanation: "الغلو: أن يكون المعنى المبالغ فيه مستحيل الوقوع عقلاً وعادة معاً، كوصف قوة شخص بأن النطف غير المخلوقة تخافه." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "من الذي قسّم المبالغة إلى (تبليغ، وإغراق، وغلو)؟", options: ["الجاحظ","السكاكي","عبد القاهر الجرجاني","قدامة بن جعفر"], correct: 1, explanation: "السكاكي هو من قسّم المبالغة إلى هذه الأقسام الثلاثة في كتابه (مفتاح العلوم)." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "دخول كلمة مثل (يكاد) على تعبير مبالغ فيه، كما في (يكاد سنا برقه يذهب بالأبصار)، يجعل الغلو:", options: ["مقبولاً؛ لأن (يكاد) تدل على مقاربة الفعل لا وقوعه فعلاً","مرفوضاً تماماً","غير مؤثر بلاغياً","يتحول إلى تشبيه بليغ"], correct: 0, explanation: "دخول (يكاد) على العبارة يجعلها تفيد أن الأمر لم يقع فعلاً بل قارب الوقوع، فيصبح الغلو بذلك مقبولاً ومستساغاً بلاغياً بدلاً من كونه مستحيلاً." },
+{ category: "حسن التعليل والإطناب والمبالغة", text: "من الذي كان أول من تنبَّه لأسلوب (تلقي المخاطَب بغير ما يترقبه)، وأطلق عليه اسم (اللغز في الجواب)؟", options: ["الجاحظ","السكاكي","ابن المعتز","قدامة بن جعفر"], correct: 0, explanation: "يُعد الجاحظ أول من تنبَّه لهذا الأسلوب البلاغي، وعقد له باباً في كتابه (البيان والتبيين)، وسماه (اللغز في الجواب)، ويُعرف حديثاً باسم (أسلوب الحكيم)." },
+{ category: "الصرف والإعلال والإبدال", text: "الفعل الماضي المبني للمجهول من (عافى) هو:", options: ["عافَى","عُوفِيَ","يُعافى","مُعافى"], correct: 1, explanation: "الفعل الماضي المبني للمجهول من (عافى) هو (عُوفِيَ)؛ إذ يُضم أول الفعل ويُكسر ما قبل الآخر عند البناء للمجهول في الأفعال المعتلة من هذا النوع." },
+{ category: "الصرف والإعلال والإبدال", text: "الاسم المنسوب (كـ مصريّ) من ناحية العمل النحوي يعمل عمل:", options: ["الفعل المضارع","اسم المفعول (وقد يعمل عمل الصفة المشبهة)","اسم الفاعل فقط","المصدر الصريح"], correct: 1, explanation: "الاسم المنسوب يتضمن معنى اسم المفعول (منسوب إلى كذا)، فيعمل عمله، فيرفع نائب فاعل، كما في (هذا رجلٌ مصريٌّ أبوهُ) حيث (أبوه) نائب فاعل للاسم المنسوب (مصري)." },
+{ category: "الصرف والإعلال والإبدال", text: "الاسم المنسوب من حيث الشكل الصرفي يُشبه:", options: ["الاسم المقصور","الاسم الممدود","الاسم المنقوص (شبه المنقوص)؛ لانتهائه بياء مشددة","جمع المذكر السالم"], correct: 2, explanation: "الاسم المنسوب ينتهي بياء مشددة مكسور ما قبلها، فيُشبه في شكله الاسم المنقوص من حيث انتهاؤه بالياء." },
+{ category: "الصرف والإعلال والإبدال", text: "أي الكلمات التالية اسم مصروف من بين هذه الأسماء التي تنتهي بصيغة (فَعْلان)؟", options: ["سكران (مؤنثها سكرى بلا تاء)","عطشان (مؤنثها عطشى بلا تاء)","سيفان بمعنى طويل (مؤنثها سيفانة بالتاء)","جوعان (مؤنثها جوعى بلا تاء)"], correct: 2, explanation: "الوصف على وزن (فَعْلان) يُمنع من الصرف إذا كان مؤنثه (فَعْلى) بلا تاء، كسكران/سكرى وعطشان/عطشى وجوعان/جوعى. أما (سيفان) بمعنى الطويل، فمؤنثه (سيفانة) بالتاء، فهو مصروف." },
+{ category: "الصرف والإعلال والإبدال", text: "ما تصغير كلمة (نار)؟", options: ["نُوَير","نُوَيرة (بزيادة تاء التأنيث لأنها مؤنث مجازي)","نِيرة","نُورة"], correct: 1, explanation: "عند تصغير الأسماء المؤنثة تأنيثاً مجازياً (كـ نار ودار) دون علامة تأنيث ظاهرة، تُزاد تاء التأنيث عند التصغير، فتصبح (نُوَيرة)." },
+{ category: "الصرف والإعلال والإبدال", text: "ما تصغير كلمة (دار)؟", options: ["دُوَير","دُوَيرة","دِيرة","دُورة"], correct: 1, explanation: "مثل (نار)، تُصغَّر (دار) بزيادة تاء التأنيث لأنها مؤنث مجازي، فتصبح (دُوَيرة)." },
+{ category: "الصرف والإعلال والإبدال", text: "ما تصغير كلمة (آدم)؟", options: ["أُدَيْم","أُوَيْدِم","آدَيْم","أُدَيدِم"], correct: 1, explanation: "تصغير (آدم) هو (أُوَيْدِم)؛ إذ تُرَدّ الألف الزائدة إلى أصلها (الواو) عند التصغير." },
+{ category: "الصرف والإعلال والإبدال", text: "ما جمع كلمة (مُقلة) بمعنى العين؟", options: ["مُقَل","مُقلات","مُقائل","مَقاول"], correct: 0, explanation: "جمع (مُقلة) هو (مُقَل)، على وزن جمع التكسير القياسي لـ(فُعْلة)." },
+{ category: "الصرف والإعلال والإبدال", text: "ما جمع كلمة (سفرجل)؟", options: ["سفارج","سفارجل","سفارجة","سفارج فقط دون زيادة"], correct: 0, explanation: "جمع (سفرجل) على وزن (فَعالِل) هو (سفارج)." },
+{ category: "الصرف والإعلال والإبدال", text: "ما مضارع الفعل (جَرُؤَ)؟", options: ["يَجرَأ (الهمزة على ألف)","يَجرُؤ (الهمزة على واو)","يَجرِئ (الهمزة على ياء)","يَجرأ (الهمزة على السطر)"], correct: 1, explanation: "مضارع (جَرُؤَ) هو (يَجرُؤ)، والهمزة فيه مضمومة بعد ضم، فتُكتب على واو." },
+{ category: "الصرف والإعلال والإبدال", text: "إذا اجتمعت همزتان في كلمة واحدة، الأولى متحركة والثانية ساكنة، فإن القاعدة الصرفية تقضي بـ:", options: ["حذف الهمزة الثانية دون قلب","إبقاء الهمزتين كما هما دون تغيير","قلب الهمزة الثانية الساكنة حرف مد يجانس حركة الهمزة الأولى المتحركة","قلب الهمزة الأولى فقط"], correct: 2, explanation: "القاعدة: إذا اجتمعت همزتان إحداهما متحركة والأخرى ساكنة، تُقلب الساكنة حرف مد من جنس حركة الهمزة المتحركة التي قبلها (فتحة←ألف، ضمة←واو، كسرة←ياء)، كما في (آمن) أصلها (أَأْمَن)، و(أومن) أصلها (أُأْمِن)، و(إيمان) أصلها (إئْمان)." },
+{ category: "الصرف والإعلال والإبدال", text: "كلمة (هائم) أصلها (هايم)، وقد أُبدلت الياء همزة؛ لأن الياء:", options: ["وقعت لاماً للكلمة","وقعت عيناً لاسم الفاعل، وقد أُعلَّت في فعله (هام)","لم تُسبق بألف زائدة","وقعت في آخر الكلمة"], correct: 1, explanation: "أُبدلت الياء همزة في (هائم)؛ لأنها وقعت عيناً لاسم الفاعل من فعل مُعتلّ العين (هام يهيم)، وقد جرى إعلالها في الفعل نفسه فتبعها اسم الفاعل في الإعلال بالإبدال إلى همزة." },
+{ category: "الصرف والإعلال والإبدال", text: "أي الكلمات التالية جمعها شاذّ (خارج عن القياس المعتاد)؟", options: ["كتب وأقلام","معايش ومصائب","طلاب ومعلمون","بيوت وحدائق"], correct: 1, explanation: "جمعا (معايش) و(مصائب) يُعدّان من الجموع الشاذة صرفياً؛ إذ خرجا عن القياس المتوقع لأصلهما اللغوي، رغم شيوع استخدامهما." },
+{ category: "الصرف والإعلال والإبدال", text: "حروف الإبدال في اللغة العربية مجموعة في العبارة المشهورة:", options: ["هدأت موطيا","سألتمونيها","صرمت جيلة","ألفاظ مذكورة"], correct: 0, explanation: "حروف الإبدال العشرة مجموعة في عبارة (هدأت موطيّا)، وهي: الهاء، الدال، الهمزة، التاء، الميم، الواو، الطاء، الياء، الألف." },
+{ category: "قواعد نحوية", text: "الفعل الماضي المتصل بتاء التأنيث الساكنة (كـ ذهبَتْ) يُبنى على:", options: ["الفتح","السكون","الضم","الكسر"], correct: 0, explanation: "الفعل الماضي يُبنى على الفتح أصلاً، ويبقى مبنياً على الفتح إذا اتصل بتاء التأنيث الساكنة، كما في (ذهبَتْ هندُ)." },
+{ category: "قواعد نحوية", text: "الفعل الماضي المتصل بتاء الفاعل المتحركة (كـ ذهبْتُ) يُبنى على:", options: ["الفتح","السكون","الضم","الكسر"], correct: 1, explanation: "يُبنى الفعل الماضي على السكون إذا اتصل بضمير رفع متحرك، كتاء الفاعل، مثل (ذهبْتُ) و(ذهبْنا)." },
+{ category: "قواعد نحوية", text: "ياء المخاطَبة (كـ في تكتبين) تتصل بـ:", options: ["الفعل الماضي فقط","الفعل المضارع والفعل الأمر","الاسم فقط","الحرف فقط"], correct: 1, explanation: "ياء المخاطَبة من علامات الفعل المضارع (تكتبين) والفعل الأمر (اكتبي)، ولا تتصل بالفعل الماضي." },
+{ category: "قواعد نحوية", text: "اسم التفضيل المقترن بـ(أل) يجب أن يطابق الموصوف تطابقاً تاماً، فجمع (الأفضل) للمؤنث العاقل يكون:", options: ["الأفضليات","الفضليات","الفاضلات","الأفاضل"], correct: 1, explanation: "اسم التفضيل المقترن بـ(أل) يُطابق موصوفه، ويُصاغ جمعه المؤنث بقلب الألف ياءً ثم جمعه بالألف والتاء، فتصبح (الفُضْليات)." },
+{ category: "قواعد نحوية", text: "متى يجوز مجيء الحال نكرة (خلافاً للأصل الذي يقتضي كونها معرفة أو قريبة من المعرفة)؟", options: ["لا يجوز أبداً","إذا سُبقت بنفي أو نهي أو استفهام","إذا كانت مثنى فقط","إذا كانت جمعاً فقط"], correct: 1, explanation: "يجوز مجيء الحال نكرة إذا سُبقت بنفي أو نهي أو استفهام، كما في (ما جاءني أحدٌ راكباً)." },
+{ category: "قواعد نحوية", text: "متى يجوز في الفعل المضارع الواقع بعد (إذَنْ) الرفعُ والنصبُ معاً؟", options: ["إذا سُبقت (إذن) بواو أو فاء العطف","إذا جاءت (إذن) في أول الكلام دائماً","لا يجوز فيه إلا النصب مطلقاً","لا يجوز فيه إلا الرفع مطلقاً"], correct: 0, explanation: "إذا سُبقت (إذن) بواو العطف أو فاء العطف، جاز في الفعل المضارع بعدها الرفعُ (على الاستئناف) والنصبُ (بإذن نفسها) معاً." },
+{ category: "قواعد نحوية", text: "إذا فُصل بين الفعل ونائب فاعله المؤنث بفاصل (كالمفعول به أو ظرف)، فإن حكم تأنيث الفعل يكون:", options: ["واجباً دائماً","جائزاً (يجوز التذكير والتأنيث)","ممنوعاً مطلقاً","لا علاقة للفصل بحكم التأنيث"], correct: 1, explanation: "إذا فُصل بين الفعل وفاعله المؤنث (الحقيقي أو المجازي) بفاصل، جاز في الفعل التذكير والتأنيث معاً." },
+{ category: "قواعد نحوية", text: "تأنيث الفعل مع الفاعل المؤنث المجازي (كالشمس، الريح) يكون حكمه:", options: ["واجباً دائماً","جائزاً (يجوز تذكيره وتأنيثه)","ممنوعاً","لا يجوز إلا التذكير"], correct: 1, explanation: "الفاعل المؤنث المجازي (الذي ليس له علامة تأنيث حقيقية كالشمس) يجوز مع فعله التذكير والتأنيث معاً، كقولنا (طلعتِ الشمسُ) أو (طلع الشمسُ)." },
+{ category: "قواعد نحوية", text: "إذا اتصل بالفعل ضمير مستتر يعود على اسم مؤنث حقيقي مذكور قبله مباشرة (بلا فاصل)، فإن تأنيث الفعل يكون:", options: ["جائزاً","واجباً","ممنوعاً","لا علاقة له بجنس الفاعل"], correct: 1, explanation: "إذا كان الفاعل ضميراً مستتراً يعود على مؤنث حقيقي متصل بالفعل مباشرة، وجب تأنيث الفعل، كما في (فاطمةُ قطفتْ الوردةَ)." },
+{ category: "قواعد نحوية", text: "الأصل النحوي في ترتيب الاسم واللقب عند ذكرهما معاً هو:", options: ["تقديم اللقب على الاسم دائماً","تقديم الاسم على اللقب، وقد يُخالَف ذلك لغرض بلاغي كالتشويق","لا يوجد ترتيب معياري بينهما","يُذكر أحدهما فقط دون الآخر"], correct: 1, explanation: "الأصل تقديم الاسم على اللقب، لكن قد يخرج الشاعر عن هذا الترتيب لغرض بلاغي، كتشويق السامع لمعرفة الاسم بعد ذكر اللقب." },
+{ category: "العروض وعيوب القافية", text: "كم عدد البحور الشعرية العربية بعد إضافة البحر الذي زاده الأخفش على بحور الخليل بن أحمد الخمسة عشر؟", options: ["14 بحراً","15 بحراً","16 بحراً","18 بحراً"], correct: 2, explanation: "وضع الخليل بن أحمد الفراهيدي 15 بحراً، ثم أضاف تلميذه الأخفش بحر (المتدارك) فأصبح المجموع 16 بحراً." },
+{ category: "العروض وعيوب القافية", text: "عيب في القافية يتمثل في تغيّر حركة حرف الرَّوِيّ بين حركتين متباعدتين (كالفتحة والضمة) يُسمى:", options: ["الإقواء","الإيطاء","التضمين","الإكفاء"], correct: 0, explanation: "الإقواء: عيب في القافية ينشأ من اختلاف حركة الروي بين الأبيات بحركات متباعدة كالكسرة والضمة." },
+{ category: "العروض وعيوب القافية", text: "عيب في القافية يتمثل في تكرار الكلمة نفسها كقافية مرتين دون فاصل كافٍ من الأبيات يُسمى:", options: ["الإقواء","الإيطاء","التضمين","الإكفاء"], correct: 1, explanation: "الإيطاء: تكرار الكلمة الواحدة بلفظها ومعناها كقافية لبيتين، دون أن يفصل بينهما سبعة أبيات على الأقل بحسب رأي العروضيين." },
+{ category: "العروض وعيوب القافية", text: "من واضع علم العروض (ميزان الشعر)؟", options: ["الخليل بن أحمد الفراهيدي","سيبويه","الأصمعي","الأخفش"], correct: 0, explanation: "الخليل بن أحمد الفراهيدي هو واضع علم العروض، وقد استنبط بحوره الخمسة عشر الأولى." },
+{ category: "العروض وعيوب القافية", text: "الوزن الشعري (العمود الذي يسير عليه البيت من حيث الوزن والقافية) عند القدماء يُسمى:", options: ["عمود الشعر","قفل الشعر","غصن الشعر","دور الشعر"], correct: 0, explanation: "يُطلق على النظام الثابت الذي يسير عليه الوزن والقافية عبر أبيات القصيدة اسم (عمود الشعر أو عمود القافية) عند الشعراء القدامى." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (قانع) في السياق البلاغي؟", options: ["غاضب","راضٍ","جائع","متردد"], correct: 1, explanation: "(قانع) بمعنى راضٍ بما قُسم له." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (زائف)؟", options: ["أصيل وثمين","مغشوش أو رديء","نادر وجميل","قوي ومتين"], correct: 1, explanation: "(زائف) بمعنى مغشوش أو رديء، كالعملة الزائفة غير الحقيقية." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (نمطي) في وصف شخص أو أسلوب؟", options: ["متجدد ومبتكر دائماً","رتيب لا يتغير، يسير على نمط واحد ثابت","غامض وصعب الفهم","سريع التقلب"], correct: 1, explanation: "(نمطي) نسبة إلى (النمط)، بمعنى الشيء الرتيب الذي لا يتغير أسلوبه أو طريقته." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (متهور)؟", options: ["حكيم متأنٍّ","مندفع متسرع دون تروٍّ","خائف متردد","كريم سخي"], correct: 1, explanation: "(متهور) بمعنى مندفع متسرع في تصرفاته دون تفكير أو تروٍّ." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (يلهث) في وصف حال الإنسان أو الحيوان؟", options: ["يبتسم فرحاً","يُخرج لسانه من شدة العطش أو التعب","ينام عميقاً","يتكلم بسرعة"], correct: 1, explanation: "(يلهث) بمعنى يُخرج لسانه، وغالباً ما يكون ذلك من شدة العطش أو الإجهاد والتعب." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (طافش) في وصف شخص؟", options: ["جالس هادئ","خرج هائماً تائهاً على وجهه","عائد إلى بيته","نائم مستريح"], correct: 1, explanation: "(طافش) بمعنى خرج هائماً على وجهه بلا وجهة محددة." },
+{ category: "معاني المفردات", text: "ما معنى كلمة (سامٍ) في وصف شخص أو خُلق؟", options: ["فاضل جليل رفيع القدر","بخيل شحيح","ضعيف واهن","غامض مبهم"], correct: 0, explanation: "(سامٍ) بمعنى فاضل جليل رفيع القدر والمكانة." },
+{ category: "التشبيه", text: "التشبيه الذي لا يُصرَّح فيه بالمشبه والمشبه به معاً، بل يُلمَح إليهما ضمناً من خلال المعنى العام، ويكثر وروده في الحكم والأمثال، يُسمى:", options: ["التشبيه المفصَّل","التشبيه الضمني","التشبيه البليغ","التشبيه التمثيلي"], correct: 1, explanation: "التشبيه الضمني: لا يُصرَّح فيه بأداة التشبيه ولا بلفظَي المشبه والمشبه به صراحة في تركيب واحد واضح، بل يُفهم التشبيه ضمناً من سياق الكلام، ويشيع استخدامه في الحكم والأمثال لإقناع السامع دون إعلان مباشر للمقارنة." },
+{ category: "التشبيه", text: "أداة التشبيه إذا كانت فعلاً مثل (كان) أو (شابه) أو (ماثل)، فإنها تسبق:", options: ["المشبه به دائماً","المشبه (يليها المشبه، ثم يأتي المشبه به بعد ذلك في التركيب)","لا علاقة لها بترتيب الطرفين","حرف الجر فقط"], correct: 1, explanation: "أدوات التشبيه الفعلية مثل (كان، شابه، ماثل) تتصل بالمشبه مباشرة، بينما يأتي المشبه به لاحقاً في الجملة، بخلاف الأدوات الحرفية أو الاسمية مثل (الكاف، مثل، شبه) التي تسبق المشبه به مباشرة." },
+{ category: "التشبيه", text: "تشبيه ذُكرت فيه أركانه الأربعة كاملة (المشبه والمشبه به والأداة ووجه الشبه) يُسمى:", options: ["تشبيهاً بليغاً","تشبيهاً تاماً (مفصَّلاً)","تشبيهاً ضمنياً","تشبيهاً مؤكداً"], correct: 1, explanation: "التشبيه التام (المفصَّل): هو ما ذُكرت فيه جميع أركانه الأربعة: المشبه، والمشبه به، والأداة، ووجه الشبه." }];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let submitted = false;
+let selectedMinutes = 30;
+let timeLeftSeconds = 30 * 60;
+let timerInterval = null;
+let examStartTime = null;
+
+function updateTimeDisplay() {
+  const val = document.getElementById('timeSlider').value;
+  selectedMinutes = parseInt(val);
+  document.getElementById('timeDisplay').textContent = `${val} دقيقة`;
+  document.querySelectorAll('.timer-preset').forEach(b => b.classList.remove('active'));
+}
+
+function setPreset(mins) {
+  selectedMinutes = mins;
+  document.getElementById('timeSlider').value = mins;
+  document.getElementById('timeDisplay').textContent = `${mins} دقيقة`;
+  document.querySelectorAll('.timer-preset').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function buildCatSummary() {
+  const cats = {};
+  questions.forEach(q => { cats[q.category] = (cats[q.category]||0)+1; });
+  const wrap = document.getElementById('catSummary');
+  wrap.innerHTML = '';
+  Object.keys(cats).forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'cat-summary-item';
+    div.innerHTML = `<span>${c}</span><span class="n">${cats[c]}</span>`;
+    wrap.appendChild(div);
+  });
+}
+buildCatSummary();
+
+function startExam() {
+  timeLeftSeconds = selectedMinutes * 60;
+  examStartTime = Date.now();
+  document.getElementById('startView').style.display = 'none';
+  document.getElementById('examView').style.display = 'block';
+  renderQuestion();
+  startTimer();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeftSeconds--;
+    updateTimerDisplay();
+    if (timeLeftSeconds <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timeupBanner').style.display = 'block';
+      submitExam(true);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeftSeconds / 60);
+  const s = timeLeftSeconds % 60;
+  const el = document.getElementById('timeLeftDisplay');
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.classList.toggle('urgent', timeLeftSeconds <= 60);
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('progressBar').style.width = ((current+1)/questions.length*100) + '%';
+  document.getElementById('qCounter').textContent = `السؤال ${current+1} من ${questions.length}`;
+  document.getElementById('qCategory').textContent = q.category;
+  document.getElementById('qText').textContent = q.text;
+
+  const optsDiv = document.getElementById('qOptions');
+  optsDiv.innerHTML = '';
+  const letters = ['أ','ب','ج','د'];
+  const answered = answers[current] !== null;
+
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    if (answered) {
+      if (idx === q.correct) btn.classList.add('correct-answer');
+      else if (idx === answers[current]) btn.classList.add('wrong-answer');
+    }
+    let iconHtml = '';
+    if (answered && idx === q.correct) iconHtml = '<span class="result-icon">✓</span>';
+    else if (answered && idx === answers[current]) iconHtml = '<span class="result-icon">✗</span>';
+    btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span> <span class="opt-text">${opt}</span> ${iconHtml}`;
+    btn.onclick = () => selectAnswer(idx);
+    optsDiv.appendChild(btn);
+  });
+
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === questions.length - 1;
+  document.getElementById('submitBtn').style.display = current === questions.length - 1 ? 'block' : 'none';
+
+  const feedback = document.getElementById('instantFeedback');
+  if (answered) {
+    const isCorrect = answers[current] === q.correct;
+    feedback.style.display = 'block';
+    feedback.className = 'instant-feedback ' + (isCorrect ? 'correct' : 'wrong');
+    feedback.textContent = isCorrect ? '✓ إجابة صحيحة!' : `✗ إجابة خاطئة — الصحيحة هي: ${letters[q.correct]}) ${q.options[q.correct]}`;
+  } else {
+    feedback.style.display = 'none';
+  }
+
+  const explainBtn = document.getElementById('explainBtn');
+  const explainBox = document.getElementById('explanationBox');
+  explainBox.style.display = 'none';
+  explainBtn.textContent = '💡 عرض شرح الإجابة';
+  explainBtn.style.display = answered ? 'block' : 'none';
+}
+
+function selectAnswer(idx) {
+  if (submitted || answers[current] !== null) return;
+  answers[current] = idx;
+  renderQuestion();
+}
+
+function nextQuestion() { if (current < questions.length - 1) { current++; renderQuestion(); } }
+function prevQuestion() { if (current > 0) { current--; renderQuestion(); } }
+
+function toggleExplanation() {
+  const q = questions[current];
+  const box = document.getElementById('explanationBox');
+  const btn = document.getElementById('explainBtn');
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+    btn.textContent = '💡 عرض شرح الإجابة';
+  } else {
+    const isCorrect = answers[current] === q.correct;
+    box.className = 'explanation-box ' + (isCorrect ? 'correct' : 'wrong');
+    box.innerHTML = `<span class="verdict">${isCorrect ? '✓ إجابة صحيحة' : '✗ إجابة خاطئة'}</span>${q.explanation}`;
+    box.style.display = 'block';
+    btn.textContent = '💡 إخفاء الشرح';
+  }
+}
+
+function submitExam(byTimeout) {
+  if (submitted) return;
+  submitted = true;
+  clearInterval(timerInterval);
+  let score = 0;
+  answers.forEach((a, i) => { if (a === questions[i].correct) score++; });
+  const pct = (score / questions.length * 100).toFixed(1);
+
+  document.getElementById('examView').style.display = 'none';
+  document.getElementById('resultView').style.display = 'block';
+
+  document.getElementById('resultEmoji').textContent = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+  document.getElementById('resultScore').textContent = `${score} من ${questions.length} إجابة صحيحة`;
+  document.getElementById('resultPct').textContent = `${pct}%`;
+  document.getElementById('resultMsg').textContent = pct >= 80 ? '🌟 ممتاز! أنت متفوق' : pct >= 60 ? '✓ جيد جداً، استمر في المذاكرة' : '📖 يتطلب مزيداً من المراجعة';
+
+  const elapsedSec = Math.round((Date.now() - examStartTime) / 1000);
+  const em = Math.floor(elapsedSec/60), es = elapsedSec%60;
+  document.getElementById('resultTime').textContent = byTimeout ? `⏰ انتهى الاختبار بانتهاء الوقت المحدد (${selectedMinutes} دقيقة)` : `⏱ الوقت المستغرق: ${em} دقيقة و${es} ثانية`;
+
+  const circumference = 352;
+  const offset = circumference - (pct / 100) * circumference;
+  const ring = document.getElementById('ringFill');
+  setTimeout(() => { ring.style.transition = 'stroke-dashoffset 1s ease'; ring.style.strokeDashoffset = offset; }, 100);
+  document.getElementById('resultRingValue').textContent = pct + '%';
+
+  buildCategoryBreakdown();
+  buildReview();
+}
+
+function buildCategoryBreakdown() {
+  const cats = {};
+  questions.forEach((q, i) => {
+    if (!cats[q.category]) cats[q.category] = { correct: 0, total: 0 };
+    cats[q.category].total++;
+    if (answers[i] === q.correct) cats[q.category].correct++;
+  });
+  const wrap = document.getElementById('catBreakdown');
+  wrap.innerHTML = '';
+  Object.keys(cats).forEach(cat => {
+    const c = cats[cat];
+    const catPct = (c.correct / c.total * 100).toFixed(0);
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `
+      <div class="cat-row-top"><span>${cat}</span><span class="cat-score">${c.correct}/${c.total}</span></div>
+      <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:${catPct}%"></div></div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function buildReview() {
+  const letters = ['أ','ب','ج','د'];
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  questions.forEach((q, i) => {
+    const userAns = answers[i];
+    const isCorrect = userAns === q.correct;
+    const item = document.createElement('div');
+    item.className = 'review-item';
+    item.innerHTML = `
+      <div class="q-num">السؤال ${i+1} — ${q.category}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="ans-line ${isCorrect ? 'correct' : 'wrong'}">
+        إجابتك: ${userAns !== null ? letters[userAns] + ') ' + q.options[userAns] : 'لم تتم الإجابة'} ${isCorrect ? '✓' : '✗'}
+      </div>
+      ${!isCorrect ? `<div class="ans-line correct">الإجابة الصحيحة: ${letters[q.correct]}) ${q.options[q.correct]}</div>` : ''}
+      <div class="explain-line">${q.explanation}</div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function toggleReview() {
+  const list = document.getElementById('reviewList');
+  list.style.display = list.style.display === 'block' ? 'none' : 'block';
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  submitted = false;
+  document.getElementById('startView').style.display = 'block';
+  document.getElementById('examView').style.display = 'none';
+  document.getElementById('resultView').style.display = 'none';
+  document.getElementById('reviewList').style.display = 'none';
+  document.getElementById('timeupBanner').style.display = 'none';
+}
+
+const LOCK_PASSWORD = "333";
+
+function checkLockPassword() {
+  const input = document.getElementById('lockPasswordInput');
+  const val = input.value.trim();
+  if (val === LOCK_PASSWORD) {
+    document.getElementById('lockView').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+    try { sessionStorage.setItem('examUnlocked', '1'); } catch(e) {}
+  } else {
+    document.getElementById('lockError').style.display = 'block';
+    input.focus();
+  }
+}
+
+(function() {
+  try {
+    if (sessionStorage.getItem('examUnlocked') === '1') {
+      document.getElementById('lockView').style.display = 'none';
+      document.getElementById('mainContainer').style.display = 'block';
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
